@@ -13,4 +13,4 @@ const producto = {
 
 }
 
-console.log(producto);
+console.log(producto.nombre);

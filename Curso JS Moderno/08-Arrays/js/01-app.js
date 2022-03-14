@@ -1,13 +1,10 @@
+const numeros = [10,20,30];
 
-const nombre = "Monitor 20 pulgadas";
-const precio = 300;
-const disponible = true;
+const meses = new Array('Enero', 'Febrero', 'Marzo')
 
-//Un objeto agrupa todo en un sola variable
+console.log(numeros)
+console.log(meses)
 
-//object litreal
-const producto = {
-    nombre : "Monitor 20 pulgadas"
-}
+const deTodo = ['Hola', true,  'si', null];
 
-console.log(producto)
+console.log(deTodo)
