@@ -1,5 +1,6 @@
 //Variables
 const btnEnviar = document.querySelector('#enviar');
+const btnReset = document.querySelector('#resetBtn')
 const formulario = document.querySelector('#enviar-mail');
 
 const email = document.querySelector('#email')
@@ -22,6 +23,9 @@ function eventListeners() {
 
     //Enviar email
     formulario.addEventListener('submit', enviarEmail)
+
+    //Reset al formulario desde boton
+    btnReset.addEventListener('click', resetForm)
 }
 
 //Funciones
@@ -50,7 +54,7 @@ function validarFormulario(e) {
 
     if(e.target.type === 'email') {
         
-        if(er.test (e.target.value)) {
+        if(er.test (email.value)) {
             const error = document.querySelector('p.error')
             if(error) {
                 error.remove()
@@ -91,7 +95,22 @@ function enviarEmail(e) {
         //Mensaje que envie corrrectamente
         const msjExito = document.createElement('p');
         msjExito.textContent = 'El email ha sido enviado exitosamente'
-        msjExito.classList.add('border', 'border-green-500', 'p-3', 'mb-4')
+        msjExito.classList.add('border', 'text-white', 'bg-green-500','p-3','mb-4', 'text-center')
         formulario.insertBefore(msjExito, spinner)
+
+        setTimeout(()=> {
+            msjExito.remove()//Eliminar el mensaje de exito
+            resetForm(e)
+            
+        },3000)
     }, 3000);
+}
+
+//Funcion que reestablece el formulario
+
+function resetForm(e) {
+    e.preventDefault()
+    formulario.reset()
+    iniciarApp()
+    
 }
