@@ -6,6 +6,8 @@ const email = document.querySelector('#email')
 const asunto = document.querySelector('#asunto')
 const mensaje = document.querySelector('#mensaje')
 
+const er = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+
 
 //Event Listeners
 eventListeners();
@@ -17,6 +19,9 @@ function eventListeners() {
     email.addEventListener('blur', validarFormulario)
     asunto.addEventListener('blur', validarFormulario)
     mensaje.addEventListener('blur', validarFormulario)
+
+    //Enviar email
+    formulario.addEventListener('submit', enviarEmail)
 }
 
 //Funciones
@@ -31,8 +36,9 @@ function validarFormulario(e) {
     if(e.target.value.length > 0) {
         //Eliminar errores...
         const error = document.querySelector('p.error')
-        error.remove()
-
+        if(error) {
+            error.remove()
+        }
         e.target.classList.remove('border', 'border-red-500')
         e.target.classList.add('border', 'border-green-500')
         
@@ -43,14 +49,21 @@ function validarFormulario(e) {
     }
 
     if(e.target.type === 'email') {
-        const er = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
         
         if(er.test (e.target.value)) {
-            console.log('Email Valido')
+            const error = document.querySelector('p.error')
+            if(error) {
+                error.remove()
+            }
         } else {
             e.target.classList.add('border', 'border-red-500')
             mostrarError('Email no valido')
         }
+    }
+
+    if(er.test(email.value) && asunto.value !== '' && mensaje.value !== '') {
+        btnEnviar.disabled = false
+        btnEnviar.classList.remove('cursor-not-allowed', 'opacity-50')
     }
 }
 
@@ -63,4 +76,22 @@ function mostrarError(mensaje) {
     if(errores.length === 0){
         formulario.appendChild(msjError)
     }
+}
+
+function enviarEmail(e) {
+    e.preventDefault()
+   //Mostrar el spinner
+    const spinner = document.querySelector('#spinner')
+    spinner.style.display = 'flex'
+
+    //Despues de 3 segundos ocultar el spinner y mostrar el mensaje
+    setTimeout(() => {
+        spinner.style.display = 'none'
+
+        //Mensaje que envie corrrectamente
+        const msjExito = document.createElement('p');
+        msjExito.textContent = 'El email ha sido enviado exitosamente'
+        msjExito.classList.add('border', 'border-green-500', 'p-3', 'mb-4')
+        formulario.insertBefore(msjExito, spinner)
+    }, 3000);
 }
