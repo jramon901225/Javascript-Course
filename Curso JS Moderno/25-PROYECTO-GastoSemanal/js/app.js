@@ -1,14 +1,14 @@
 //Variables
-
-const formulario = document.querySelector("agregar-gasto");
-const gastos = document.querySelector("#gastos ul");
+const formulario = document.querySelector("#agregar-gasto");
+const listaGastos = document.querySelector("#gastos ul");
 
 //Eventos
-
-document.addEventListener("DOMContentLoaded", preguntarPresupuesto);
+eventListeners();
+function eventListeners() {
+    document.addEventListener("DOMContentLoaded", preguntarPresupuesto);
+}
 
 //Clases
-
 class Presupuesto {
     constructor(presupuesto) {
         this.presupuesto = Number(presupuesto);
@@ -17,17 +17,33 @@ class Presupuesto {
     }
 }
 
-class UI {}
+class UI {
+    insertarPresupuesto(cantidad) {
+        const { presupuesto, restante } = cantidad;
+        document.querySelector("#total").textContent = presupuesto;
+        document.querySelector("#restante").textContent = restante;
+    }
+}
 
-const presupuesto = new Presupuesto(500);
+//Instanciar
 const ui = new UI();
+let presupuesto;
 
-//funciones
-
+//Funciones
 function preguntarPresupuesto() {
-    const alert = window.prompt("¿Cual es tu presupuesto?");
-
-    if (alert === "" || alert === null || alert <= 0 || isNaN(alert)) {
+    const presupuestoUsuario = prompt("¿Cual es tu presupuesto");
+    if (
+        presupuestoUsuario === "" ||
+        presupuestoUsuario === null ||
+        isNaN(presupuestoUsuario) ||
+        presupuestoUsuario <= 0
+    ) {
         window.location.reload();
     }
+
+    //Presupuesto valido
+    presupuesto = new Presupuesto(presupuestoUsuario);
+    console.log(presupuesto);
+
+    ui.insertarPresupuesto(presupuesto);
 }
