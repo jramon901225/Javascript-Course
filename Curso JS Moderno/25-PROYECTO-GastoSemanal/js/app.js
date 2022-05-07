@@ -20,6 +20,16 @@ class Presupuesto {
 
     agregarGasto(gasto) {
         this.gastos = [...this.gastos, gasto];
+        this.calcularRestante();
+    }
+
+    calcularRestante() {
+        const gastado = this.gastos.reduce(
+            (total, gasto) => total + gasto.cantidad,
+            0
+        );
+        this.restante = this.presupuesto - gastado;
+        console.log(this.restante);
     }
 }
 
@@ -52,7 +62,44 @@ class UI {
     }
 
     agregarGastoListado(gasto) {
-        console.log(gasto);
+        //elimina el HTML previo
+        this.limpiarHTML();
+
+        //Iteramos sobre gastos
+
+        gasto.forEach((gasto) => {
+            const { cantidad, nombreGasto, id } = gasto;
+
+            //Crear LI
+            const nuevoGasto = document.createElement("li");
+            nuevoGasto.className =
+                "list-group-item d-flex justify-content-between align-items-center";
+            nuevoGasto.dataset.id = id;
+
+            //Agregamos al HTML
+            nuevoGasto.innerHTML = ` ${nombreGasto} <span class="badge badge-primary badge-pill"> $ ${cantidad}</span>`;
+
+            //Boton para borrar el gasto
+            const btnBorrar = document.createElement("button");
+            btnBorrar.textContent = "Eliminar";
+            btnBorrar.classList.add("btn", "btn-danger", "borrar-gasto");
+
+            //Agregar boton para borrar el gasto
+            nuevoGasto.appendChild(btnBorrar);
+
+            //Agregar al HTML
+            listaGastos.appendChild(nuevoGasto);
+        });
+    }
+
+    limpiarHTML() {
+        while (listaGastos.firstChild) {
+            listaGastos.removeChild(listaGastos.firstChild);
+        }
+    }
+
+    actualizarRestante(restante) {
+        document.querySelector("#restante").textContent = restante;
     }
 }
 
@@ -100,9 +147,11 @@ function agregarGasto(e) {
 
     presupuesto.agregarGasto(gasto);
 
-    const { gastos } = presupuesto;
+    const { gastos, restante } = presupuesto;
 
     ui.agregarGastoListado(gastos);
+
+    ui.actualizarRestante(restante);
 
     formulario.reset();
 }
