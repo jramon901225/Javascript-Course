@@ -10,6 +10,8 @@ const sintomasInput = document.querySelector("#sintomas");
 const formulario = document.querySelector("#nueva-cita");
 const contenedorCitas = document.querySelector("#citas");
 
+let editando;
+
 //Clases
 class Citas {
     constructor() {
@@ -245,7 +247,17 @@ function editarCita(cita) {
     horaInput.value = hora;
     sintomasInput.value = sintomas;
 
+    //Llenar el objeto
+    citaObj.mascota = mascota;
+    citaObj.propietario = propietario;
+    citaObj.telefono = telefono;
+    citaObj.fecha = fecha;
+    citaObj.hora = hora;
+    citaObj.sintomas = sintomas;
+
     //cambiar el texto del boton
     formulario.querySelector('button[type="submit"]').textContent =
         "Guardar Cambios";
+
+    editando = true;
 }
