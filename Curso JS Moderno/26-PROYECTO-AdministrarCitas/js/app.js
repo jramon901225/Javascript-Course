@@ -26,8 +26,10 @@ class Citas {
         this.citas = this.citas.filter((cita) => cita.id !== id);
     }
 
-    editarCita(cita) {
-        console.log(cita);
+    editarCita(citaActualizada) {
+        this.citas = this.citas.map((cita) =>
+            cita.id === citaActualizada.id ? citaActualizada : cita
+        );
     }
 }
 class UI {
@@ -194,10 +196,25 @@ function nuevaCita(e) {
         return;
     }
 
-    //Generar un id unico
-    citaObj.id = Date.now();
-    //Creando una nueva cita
-    administrarCitas.agregarCita({ ...citaObj });
+    if (editando) {
+        ui.imprimirAlerta("se edito la cita correctamente");
+
+        //Pasar el objeto de la cita a edicion
+        administrarCitas.editarCita({ ...citaObj });
+
+        //Regresar el texto de boton al stado original
+        formulario.querySelector('button[type="submit"]').textContent =
+            "Crear cita";
+
+        editando = false;
+    } else {
+        //Generar un id unico
+        citaObj.id = Date.now();
+        //Creando una nueva cita
+        administrarCitas.agregarCita({ ...citaObj });
+        //Mensaje de agregado correctamente
+        ui.imprimirAlerta("se agrego la cita correctamente");
+    }
 
     //Reiniciamos el objeto
     reiniciarObjeto();
@@ -237,7 +254,7 @@ function eliminarCita(id) {
 }
 
 function editarCita(cita) {
-    const { mascota, propietario, telefono, fecha, hora, sintomas } = cita;
+    const { mascota, propietario, telefono, fecha, hora, sintomas, id } = cita;
 
     //Llenar los inputs en modo editar
     mascotaInput.value = mascota;
@@ -254,6 +271,7 @@ function editarCita(cita) {
     citaObj.fecha = fecha;
     citaObj.hora = hora;
     citaObj.sintomas = sintomas;
+    citaObj.id = id;
 
     //cambiar el texto del boton
     formulario.querySelector('button[type="submit"]').textContent =
